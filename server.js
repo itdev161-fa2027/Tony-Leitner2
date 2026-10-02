@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import connectDatabase from "./config/db.js";
 import User from "./models/user.js";
+import Post from "./models/Post.js";
+import auth from "./middleware/auth.js";
 
 dotenv.config();
 
@@ -102,6 +104,139 @@ app.post(
     }
   }
 );
+
+app.get("/api/posts", async (request, response) => {
+  try {
+    const posts = await Post.find()
+      .populate("user", "name")
+      .sort({ createDate: -1 });
+
+    response.json(posts);
+  } catch (error) {
+    console.error(error.message);
+    response.status(500).send("Server error");
+  }
+});
+
+app.get("/api/posts/:id", async (request, response) => {
+  try {
+    const post = await Post.findById(request.params.id).populate("user", "name");
+
+    if (!post) {
+      return response.status(404).json({ msg: "Post not found" });
+    }
+
+    response.json(post);
+  } catch (error) {
+    console.error(error.message);
+
+    if (error.kind === "ObjectId") {
+      return response.status(404).json({ msg: "Post not found" });
+    }
+
+    response.status(500).send("Server error");
+  }
+});
+
+app.post(
+  "/api/posts",
+  [
+    auth,
+    check("title", "Title is required").notEmpty(),
+    check("body", "Body is required").notEmpty()
+  ],
+  async (request, response) => {
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { title, body } = request.body;
+      const newPost = new Post({
+        user: request.user.id,
+        title,
+        body
+      });
+
+      const post = await newPost.save();
+      await post.populate("user", "name");
+      response.json(post);
+    } catch (error) {
+      console.error(error.message);
+      response.status(500).send("Server error");
+    }
+  }
+);
+
+app.put(
+  "/api/posts/:id",
+  [
+    auth,
+    check("title", "Title is required").notEmpty(),
+    check("body", "Body is required").notEmpty()
+  ],
+  async (request, response) => {
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { title, body } = request.body;
+      const post = await Post.findById(request.params.id);
+
+      if (!post) {
+        return response.status(404).json({ msg: "Post not found" });
+      }
+
+      if (post.user.toString() !== request.user.id) {
+        return response.status(401).json({ msg: "User not authorized" });
+      }
+
+      post.title = title;
+      post.body = body;
+      await post.save();
+      await post.populate("user", "name");
+      response.json(post);
+    } catch (error) {
+      console.error(error.message);
+
+      if (error.kind === "ObjectId") {
+        return response.status(404).json({ msg: "Post not found" });
+      }
+
+      response.status(500).send("Server error");
+    }
+  }
+);
+
+app.delete("/api/posts/:id", auth, async (request, response) => {
+  try {
+    const post = await Post.findById(request.params.id);
+
+    if (!post) {
+      return response.status(404).json({ msg: "Post not found" });
+    }
+
+    if (post.user.toString() !== request.user.id) {
+      return response.status(401).json({ msg: "User not authorized" });
+    }
+
+    await Post.findByIdAndDelete(request.params.id);
+    response.json({ msg: "Post removed" });
+  } catch (error) {
+    console.error(error.message);
+
+    if (error.kind === "ObjectId") {
+      return response.status(404).json({ msg: "Post not found" });
+    }
+
+    response.status(500).send("Server error");
+  }
+});
 
 connectDatabase()
   .then(() => {
