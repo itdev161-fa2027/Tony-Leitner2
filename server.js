@@ -7,10 +7,13 @@ import connectDatabase from "./config/db.js";
 import User from "./models/user.js";
 import Post from "./models/Post.js";
 import auth from "./middleware/auth.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
