@@ -2,10 +2,9 @@ import { Link } from 'react-router-dom';
 import './PostCard.css';
 
 const PostCard = ({ post }) => {
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  const formatDate = (dateString) => new Date(dateString).toLocaleDateString(undefined, {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
 
   return (
     <div className="post-card">
@@ -15,10 +14,7 @@ const PostCard = ({ post }) => {
           <span className="post-author">By {post.user?.name || 'Unknown'}</span>
           <span className="post-date">{formatDate(post.createDate)}</span>
         </div>
-        <p className="post-preview">
-          {post.body.substring(0, 150)}
-          {post.body.length > 150 ? '...' : ''}
-        </p>
+        <p className="post-preview">{post.body.substring(0, 150)}{post.body.length > 150 ? '...' : ''}</p>
         <span className="read-more">Read more {'\u2192'}</span>
       </Link>
     </div>

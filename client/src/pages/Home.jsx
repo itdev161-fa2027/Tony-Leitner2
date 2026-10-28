@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PostCard from '../components/PostCard';
 import { getPosts } from '../services/api';
 import './Home.css';
@@ -18,9 +18,7 @@ const Home = () => {
       } catch (err) {
         setError('Failed to load posts. Make sure the backend server is running.');
         console.error(err);
-      } finally {
-        setLoading(false);
-      }
+      } finally { setLoading(false); }
     };
     fetchPosts();
   }, []);
@@ -30,16 +28,9 @@ const Home = () => {
 
   return (
     <div className="container">
-      <div className="home-header">
-        <h1>Recent Posts</h1>
-        {/* Create Post button will be added in Activity 9 */}
-      </div>
-      {posts.length === 0 ? (
-        <div className="no-posts"><p>No posts yet. Check back later!</p></div>
-      ) : (
-        <div className="posts-list">
-          {posts.map((post) => <PostCard key={post._id} post={post} />)}
-        </div>
+      <div className="home-header"><h1>Recent Posts</h1></div>
+      {posts.length === 0 ? <div className="no-posts"><p>No posts yet. Check back later!</p></div> : (
+        <div className="posts-list">{posts.map(post => <PostCard key={post._id} post={post} />)}</div>
       )}
     </div>
   );
