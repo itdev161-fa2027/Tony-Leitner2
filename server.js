@@ -56,7 +56,7 @@ app.post(
       });
 
       const token = jwt.sign(
-        { user: { id: user.id } },
+        { user: { id: user.id, name: user.name } },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -95,7 +95,7 @@ app.post(
       }
 
       const token = jwt.sign(
-        { user: { id: user.id } },
+        { user: { id: user.id, name: user.name } },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
