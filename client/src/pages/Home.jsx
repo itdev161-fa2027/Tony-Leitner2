@@ -34,7 +34,10 @@ const Home = () => {
       <div className="home-header">
         <h1>Recent Posts</h1>
         {user ? (
-          <p className="auth-message">Welcome back, {user.name || 'User'}!</p>
+          <>
+            <p className="auth-message">Welcome back, {user.name || 'User'}!</p>
+            <Link to="/posts/new" className="submit-button home-create-button">Create Post</Link>
+          </>
         ) : (
           <p className="auth-message"><Link to="/login">Login</Link> or <Link to="/register">register</Link> to create posts.</p>
         )}

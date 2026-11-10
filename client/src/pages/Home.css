@@ -4,6 +4,7 @@
 .auth-message { color: #666; font-size: 1rem; margin: 0; }
 .auth-message a { color: #61dafb; text-decoration: none; font-weight: 600; }
 .auth-message a:hover { text-decoration: underline; }
+.home-create-button { display: inline-block; margin-top: 0.75rem; text-decoration: none; background: #1f7a8c; color: white; padding: .7rem 1rem; border-radius: 8px; }
 .loading, .error { text-align: center; font-size: 1.2rem; margin-top: 3rem; }
 .error { color: #d32f2f; }
 .no-posts { text-align: center; margin-top: 3rem; color: #666; }

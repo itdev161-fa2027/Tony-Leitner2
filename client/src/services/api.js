@@ -43,3 +43,18 @@ export const getPostById = async (id) => {
   const response = await api.get(`/posts/${id}`);
   return response.data;
 };
+
+export const createPost = async (title, body) => {
+  const response = await api.post('/posts', { title, body });
+  return response.data;
+};
+
+export const updatePost = async (id, title, body) => {
+  const response = await api.put(`/posts/${id}`, { title, body });
+  return response.data;
+};
+
+export const deletePost = async (id) => {
+  const response = await api.delete(`/posts/${id}`);
+  return response.data;
+};
