@@ -13,6 +13,7 @@ const Header = () => {
           <Link to="/" className="nav-link">Home</Link>
           {user ? (
             <>
+              <Link to="/posts/new" className="nav-link">New Post</Link>
               <span className="user-welcome">Hello, {user.name || 'User'}</span>
               <button className="nav-button" onClick={logout}>Logout</button>
             </>

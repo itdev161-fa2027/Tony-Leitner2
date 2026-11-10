@@ -4,5 +4,10 @@
 .post-detail-author { font-weight: 600; color: #282c34; }
 .post-detail-body { font-size: 1.1rem; line-height: 1.8; color: #444; }
 .post-detail-body p { margin-bottom: 1rem; }
+.post-actions { display: flex; gap: .75rem; margin: 0 0 1.5rem; }
+.edit-button,
+.delete-button { border: none; border-radius: 8px; padding: .7rem 1rem; font-weight: 600; cursor: pointer; }
+.edit-button { background: #1f7a8c; color: white; }
+.delete-button { background: #dc2626; color: white; }
 .back-button { background: none; border: none; color: #61dafb; font-size: 1rem; cursor: pointer; padding: .5rem 0; font-weight: 500; }
 .back-button:hover { color: #21a1c4; text-decoration: underline; }
